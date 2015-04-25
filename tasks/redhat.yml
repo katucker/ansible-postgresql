@@ -25,6 +25,7 @@
 
 - name: Install PostgreSQL (RedHat)
   yum: name=postgresql{{ postgresql_version | replace('.', '') }}-server
+  when: postgresql_server
 
 - name: Check for pgdata directory
   stat: path={{ postgresql_pgdata }}/base
@@ -38,3 +39,12 @@
 - name: Initialize database (RedHat >= 7)
   command: /usr/pgsql-{{ postgresql_version }}/bin/postgresql{{ postgresql_version | replace('.', '') }}-setup initdb
   when: ansible_distribution_major_version | int >= 7 and (pgdata_stat.stat.isdir is not defined or not pgdata_stat.stat.isdir)
+
+- name: Install PostgreSQL development files (RedHat)
+  yum: name=postgresql{{ postgresql_version | replace('.', '') }}-devel
+  when: postgresql_devel
+  
+- name: Install PostgreSQL contributed files (RedHat)
+  yum: name=postgresql{{ postgresql_version | replace('.', '') }}-contrib
+  when: postgresql_contrib
+
