@@ -31,14 +31,15 @@
   stat: path={{ postgresql_pgdata }}/base
   register: pgdata_stat
   failed_when: false
+  when: postgresql_server
 
 - name: Initialize database (RedHat < 7)
   command: /sbin/service postgresql-{{ postgresql_version }} initdb
-  when: ansible_distribution_major_version | int < 7 and (pgdata_stat.stat.isdir is not defined or not pgdata_stat.stat.isdir)
+  when: ansible_distribution_major_version | int < 7 and (pgdata_stat.stat.isdir is not defined or not pgdata_stat.stat.isdir) and postgresql_server
 
 - name: Initialize database (RedHat >= 7)
   command: /usr/pgsql-{{ postgresql_version }}/bin/postgresql{{ postgresql_version | replace('.', '') }}-setup initdb
-  when: ansible_distribution_major_version | int >= 7 and (pgdata_stat.stat.isdir is not defined or not pgdata_stat.stat.isdir)
+  when: ansible_distribution_major_version | int >= 7 and (pgdata_stat.stat.isdir is not defined or not pgdata_stat.stat.isdir) and postgresql_server
 
 - name: Install PostgreSQL development files (RedHat)
   yum: name=postgresql{{ postgresql_version | replace('.', '') }}-devel
