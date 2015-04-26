@@ -48,4 +48,9 @@
 - name: Install PostgreSQL contributed files (RedHat)
   yum: name=postgresql{{ postgresql_version | replace('.', '') }}-contrib
   when: postgresql_contrib
+  
+- name: Install specific packages, if specified (RedHat)
+  yum: name={{ item }}
+  with_items: "{{ postgresql_redhat_pkgs }}"
+  when: postgresql_redhat_pkgs is defined
 

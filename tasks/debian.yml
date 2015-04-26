@@ -11,6 +11,19 @@
 - name: Install PostgreSQL (Debian)
   apt: name=postgresql{{ '-' ~ postgresql_version if postgresql_version is defined else '' }}
   when: postgresql_server
+  
+- name: Install PostgreSQL development files (Debian)
+  apt: name=postgresql-server-dev{{ '-' ~ postgresql_version if postgresql_version is defined else '' }}
+  when: postgresql_devel
+  
+- name: Install PostgreSQL contributed files (Debian)
+  apt: name=postgresql-contrib{{ '-' ~ postgresql_version if postgresql_version is defined else '' }}
+  when: postgresql_contrib
+  
+- name: Install specific packages, if specified (Debian)
+  apt: name={{ item }}
+  with_items: "{{ postgresql_debian_pkgs }}"
+  when: postgresql_debian_pkgs is defined
 
 - name: Get installed version
   command: dpkg-query -f ${Version;3} --show postgresql
@@ -21,11 +34,3 @@
 - name: Set version fact
   set_fact: postgresql_version={{ postgresql_version_query.stdout }}
   when: postgresql_version is not defined
-  
-- name: Install PostgreSQL development files (Debian)
-  apt: name=postgresql{{ '-' ~ postgresql_version if postgresql_version is defined else '' }}-devel
-  when: postgresql_devel
-  
-- name: Install PostgreSQL contributed files (Debian)
-  apt: name=postgresql{{ '-' ~ postgresql_version if postgresql_version is defined else '' }}-contrib
-  when: postgresql_contrib

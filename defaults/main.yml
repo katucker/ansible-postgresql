@@ -7,3 +7,18 @@ postgresql_backup_mail_recipient: postgres
 postgresql_server: True
 postgresql_devel: False
 postgresql_contrib: False
+
+# Optionally define a list of specific packages to install. This mechanism is the
+# general method for installing packages other than the server, development or
+# contributed packages, controlled through the variables above. It lets you get the
+# advantage of abstracting the repo installation details without limiting you to
+# what packages can be installed from the repo.
+# Leave the variables undefined if you don't want to use this feature.
+#
+# postgresql_debian_pkgs:
+#   - python-psycopg2
+#   - postgresql{{ '-' ~ postgresql_version if postgresql_version is defined else '' }}-slony1-2
+#
+# postgresql_redhat_pkgs:
+#   - python-psycopg2
+#   - slony1-{{ postgresql_version | replace('.', '') }}
