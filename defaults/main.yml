@@ -13,7 +13,7 @@ postgresql_contrib: False
 # contributed packages, controlled through the variables above. It lets you get the
 # advantage of abstracting the repo installation details without limiting you to
 # what packages can be installed from the repo.
-# Leave the variables undefined if you don't want to use this feature.
+# Leave the variables undefined or empty if you don't want to use this feature.
 #
 # postgresql_debian_pkgs:
 #   - python-psycopg2

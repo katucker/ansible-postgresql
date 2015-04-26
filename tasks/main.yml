@@ -27,21 +27,26 @@
 
 - name: Create conf.d
   file: path={{ postgresql_conf_dir }}/conf.d state=directory owner=postgres group=postgres
+  when: postgresql_server
 
 - name: Set conf.d include in postgresql.conf
   lineinfile: line="include_dir 'conf.d'" dest={{ postgresql_conf_dir }}/postgresql.conf backup=yes
   notify: Reload PostgreSQL
+  when: postgresql_server
 
 - name: Set config options
   template: src=25ansible_postgresql.conf.j2 dest={{ postgresql_conf_dir }}/conf.d/25ansible_postgresql.conf owner=postgres group=postgres backup=yes
   notify: Reload PostgreSQL
+  when: postgresql_server
 
 - name: Install pg_hba.conf
   template: src=pg_hba.conf.{{ ansible_os_family | lower }}.j2 dest={{ postgresql_conf_dir }}/pg_hba.conf owner=postgres group=postgres mode=0400 backup=yes
   notify: Reload PostgreSQL
+  when: postgresql_server
 
 - include: backup.yml
   when: postgresql_backup_dir is defined
 
 - name: Ensure PostgreSQL is running
   service: name={{ postgresql_service_name }} enabled=yes state=started
+  when: postgresql_server

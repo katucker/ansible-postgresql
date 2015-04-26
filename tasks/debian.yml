@@ -22,8 +22,7 @@
   
 - name: Install specific packages, if specified (Debian)
   apt: name={{ item }}
-  with_items: "{{ postgresql_debian_pkgs }}"
-  when: postgresql_debian_pkgs is defined
+  with_items: postgresql_debian_pkgs if postgresql_debian_pkgs is defined else []
 
 - name: Get installed version
   command: dpkg-query -f ${Version;3} --show postgresql
