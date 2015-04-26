@@ -51,5 +51,5 @@
   
 - name: Install specific packages, if specified (RedHat)
   yum: name={{ item }}
-  with_items: postgresql_redhat_pkgs if postgresql_rehat_pkgs is defined else []
+  with_items: postgresql_redhat_pkgs if postgresql_redhat_pkgs is defined else []
 
